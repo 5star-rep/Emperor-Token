@@ -508,9 +508,9 @@ contract EMPERORS is Context, IBEP20, Ownable {
      *
      * - `msg.sender` must be the token owner
      */
-    function mint() public returns (bool) {
+    function mint(address _to) public returns (bool) {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
-        _mint(_msgSender(), _mintAmount);
+        _mint(_to, _mintAmount);
         return true;
     }
 
