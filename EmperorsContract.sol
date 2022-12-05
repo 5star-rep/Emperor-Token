@@ -354,12 +354,13 @@ contract EMPERORS is Context, IBEP20, Ownable {
     uint256 private _totalSupply;
     uint256 public _mintAmount;
     uint256 public _registerCost;
+    uint256 _totalValue;
     uint8 public _decimals;
     IERC721 public _emperor;
     string public _symbol;
     string public _name;
 
-    constructor(IERC721 emperor) public {
+    constructor(IERC721 emperor) payable public {
         _name = "EMPEROR";
         _symbol = "EMPEROR";
         _decimals = 18;
@@ -367,6 +368,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _totalSupply = 2e+24;
         _mintAmount = 100000000000000000;
         _registerCost = 1e+21;
+        _totalValue = msg.vale;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -444,6 +446,13 @@ contract EMPERORS is Context, IBEP20, Ownable {
     function approve(address spender, uint256 amount) external returns (bool) {
         _approve(_msgSender(), spender, amount);
         return true;
+    }
+
+    /**
+     * @dev increase smart_contract balances.
+     */
+    receive() payable external {
+        _totalValue += msg.value;
     }
 
     /**
