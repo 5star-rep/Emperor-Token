@@ -364,9 +364,9 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _symbol = "EMPEROR";
         _decimals = 18;
         _emperor = emperor;
-        _totalSupply = 31000000000000000000000000;
-        _mintAmount = 1000000000000000000;
-        _registerCost = 200000000000000000000;
+        _totalSupply = 2e+24;
+        _mintAmount = 100000000000000000;
+        _registerCost = 1e+21;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
