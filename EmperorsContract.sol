@@ -522,10 +522,24 @@ contract test is Context, IBEP20, Ownable {
     }
 
     /**
+     * @dev display Dev. Team
+     */
+    function Team() public pure returns (string memory) {
+        return '5 STAR Organization';
+    }
+
+    /**
+     * @dev display Founder.
+     */
+    function Founder() public pure returns (string memory) {
+        return 'Oge Ifeluo';
+    }
+
+    /**
      * @dev Register an account for minting.
      */
     function register() public {
-        _registeredUser[msg.sender] < 1, "Caller already registered");
+        require(_registeredUser[msg.sender] < 1, "Caller already registered");
         _isRegistered[msg.sender] = true;
         _transfer(msg.sender, address(this), _registerCost);
         _registeredUser[msg.sender]++;
