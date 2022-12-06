@@ -340,7 +340,7 @@ contract Ownable is Context {
 }
 
 
-contract test is Context, IBEP20, Ownable {
+contract EMPERORS is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
