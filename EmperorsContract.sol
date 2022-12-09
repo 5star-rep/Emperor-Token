@@ -351,6 +351,8 @@ contract EMPERORS is Context, IBEP20, Ownable {
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
+    mapping (uint256 => uint256) private _minters;
+
 
     uint256 private _totalSupply;
     uint256 public _mintAmount;
@@ -536,12 +538,20 @@ contract EMPERORS is Context, IBEP20, Ownable {
     }
 
     /**
+     * @dev see Number of registered minters.
+     */
+    function Minters() public view returns (uint256) {
+        return _minters[_registerCost];
+
+    /**
      * @dev Register an account for minting.
      */
     function register() public {
+        require(_minters[_registerCost] < 100, "Sufficient minters");
         require(_registeredUser[msg.sender] < 1, "Caller already registered");
         _isRegistered[msg.sender] = true;
         _transfer(msg.sender, address(this), _registerCost);
+        _minters[_registerCost]++;
         _registeredUser[msg.sender]++;
     }
 
@@ -552,6 +562,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         _isRegistered[msg.sender] = false;
         _transfer(address(this), msg.sender, _registerCost);
+        _minters[_registerCost]--;
         _registeredUser[msg.sender] = 0;
     }
 
