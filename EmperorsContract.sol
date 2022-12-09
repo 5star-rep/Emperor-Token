@@ -542,6 +542,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
      */
     function Minters() public view returns (uint256) {
         return _minters[_registerCost];
+    }
 
     /**
      * @dev Register an account for minting.
