@@ -357,6 +357,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
     uint256 private _totalSupply;
     uint256 public _mintAmount;
     uint256 public _registerCost;
+    uint256 public _Minters;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
@@ -548,9 +549,10 @@ contract EMPERORS is Context, IBEP20, Ownable {
      * @dev Register an account for minting.
      */
     function register() public {
-        require(_minters[_registerCost] < 100, "Sufficient minters");
+        require(_minters[_registerCost] < 50, "Minters exceeded");
         require(_registeredUser[msg.sender] < 1, "Caller already registered");
         _isRegistered[msg.sender] = true;
+        _Minters = _minters[_registerCost];
         _transfer(msg.sender, address(this), _registerCost);
         _minters[_registerCost]++;
         _registeredUser[msg.sender]++;
@@ -562,6 +564,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
     function Unregister() public {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         _isRegistered[msg.sender] = false;
+        _Minters = _minters[_registerCost];
         _transfer(address(this), msg.sender, _registerCost);
         _minters[_registerCost]--;
         _registeredUser[msg.sender] = 0;
