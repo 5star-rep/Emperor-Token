@@ -349,6 +349,8 @@ contract EMPERORS is Context, IBEP20, Ownable {
 
     mapping (address => uint256) private _registeredUser;
 
+    mapping (address => uint256) public _mintTime;
+
     mapping (address => mapping (address => uint256)) private _allowances;
 
     mapping (uint256 => uint256) private _minters;
@@ -512,6 +514,8 @@ contract EMPERORS is Context, IBEP20, Ownable {
      */
     function mint(address _to) public returns (bool) {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
+        require(_mintTime[msg.sender] < 8600, "Mint round exhausted");
+        _mintTime[msg.sender]++;
         _mint(_to, _mintAmount);
         return true;
     }
@@ -568,6 +572,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _transfer(address(this), msg.sender, _registerCost);
         _minters[_registerCost]--;
         _registeredUser[msg.sender] = 0;
+        _mintTime[msg.sender] = 0;
     }
 
     /**
