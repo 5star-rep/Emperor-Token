@@ -355,6 +355,8 @@ contract EMPERORS is Context, IBEP20, Ownable {
 
     mapping (uint256 => uint256) private _minters;
 
+    mapping (uint256 => uint256) private _totalMintTime;
+
 
     uint256 private _totalSupply;
     uint256 public _mintAmount;
@@ -372,7 +374,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _totalSupply = 5000000000000000000000000;
         _mintAmount = 10000000000000000;
         _registerCost = 20000000000000000000000;
-        _fee = 10000000000000000;
+        _fee = 100000000000000000;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -518,6 +520,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         require(_mintTime[msg.sender] < 8600, "Mint round exhausted");
         _mintTime[msg.sender]++;
+        _totalMintTime[_mintAmount]++;
         _mint(_to, _mintAmount);
         return true;
     }
@@ -552,7 +555,17 @@ contract EMPERORS is Context, IBEP20, Ownable {
     }
 
     /**
+     * @dev see total Mint Call excluding the Genesis Mint.
+     */
+    function TotalMint() public view returns (uint256) {
+        return _totalMintTime[_mintAmount];
+    }
+
+    /**
      * @dev Register an account for minting.
+     * 20,000.1 emperor token is required for registration.
+     * 0.1 fee will be burned, 20,000 will be locked and can be
+     * withdrawn by the depositor.
      */
     function register() public {
         require(_minters[_registerCost] < 100, "Minters exceeded");
@@ -566,7 +579,8 @@ contract EMPERORS is Context, IBEP20, Ownable {
     }
 
     /**
-     * @dev Unregister an account from minting.
+     * @dev Unregister an account from minting,
+     * and withdraw locked deposit.
      */
     function Unregister() public {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
@@ -576,7 +590,6 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _minters[_registerCost]--;
         _registeredUser[msg.sender] = 0;
         _mintTime[msg.sender] = 0;
-        _burn(msg.sender, _fee);
     }
 
     /**
