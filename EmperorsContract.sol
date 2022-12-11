@@ -359,6 +359,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
     uint256 private _totalSupply;
     uint256 public _mintAmount;
     uint256 public _registerCost;
+    uint256 public _fee;
     uint256 public _Minters;
     uint8 public _decimals;
     string public _symbol;
@@ -371,6 +372,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _totalSupply = 5000000000000000000000000;
         _mintAmount = 10000000000000000;
         _registerCost = 20000000000000000000000;
+        _fee = 10000000000000000;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -560,6 +562,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _transfer(msg.sender, address(this), _registerCost);
         _minters[_registerCost]++;
         _registeredUser[msg.sender]++;
+        _burn(msg.sender, _fee);
     }
 
     /**
@@ -573,6 +576,7 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _minters[_registerCost]--;
         _registeredUser[msg.sender] = 0;
         _mintTime[msg.sender] = 0;
+        _burn(msg.sender, _fee);
     }
 
     /**
