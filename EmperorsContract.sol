@@ -361,7 +361,6 @@ contract EMPERORS is Context, IBEP20, Ownable {
     uint256 private _totalSupply;
     uint256 public _mintAmount;
     uint256 public _registerCost;
-    uint256 public _fee;
     uint256 public _Minters;
     uint8 public _decimals;
     string public _symbol;
@@ -374,7 +373,6 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _totalSupply = 5000000000000000000000000;
         _mintAmount = 10000000000000000;
         _registerCost = 20000000000000000000000;
-        _fee = 100000000000000000;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -563,9 +561,8 @@ contract EMPERORS is Context, IBEP20, Ownable {
 
     /**
      * @dev Register an account for minting.
-     * 20,000.1 emperor token is required for registration.
-     * 0.1 fee will be burned, 20,000 will be locked and can be
-     * withdrawn by the depositor.
+     * 20,000 emperor token is required for registration.
+     * The deposited tokens will be locked and can only be withdrawn with the deposit address.
      */
     function register() public {
         require(_minters[_registerCost] < 100, "Minters exceeded");
@@ -575,7 +572,6 @@ contract EMPERORS is Context, IBEP20, Ownable {
         _transfer(msg.sender, address(this), _registerCost);
         _minters[_registerCost]++;
         _registeredUser[msg.sender]++;
-        _burn(msg.sender, _fee);
     }
 
     /**
