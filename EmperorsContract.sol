@@ -365,12 +365,14 @@ contract EMPERORS is Context, IBEP20, Ownable {
     uint8 public _decimals;
     string public _symbol;
     string public _name;
+    string public _genesisMint;
 
     constructor() public {
+        _genesisMint = "3 million tokens";
         _name = "EMPEROR";
         _symbol = "EMPEROR";
         _decimals = 18;
-        _totalSupply = 5000000000000000000000000;
+        _totalSupply = 3000000000000000000000000;
         _mintAmount = 10000000000000000;
         _registerCost = 20000000000000000000000;
         _balances[msg.sender] = _totalSupply;
