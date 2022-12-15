@@ -1,4 +1,4 @@
-
+// SPDX-License-Identifier: MIT
 // File: github/5star-rep/Emperor-Token/EmperorsContract.sol
 
 pragma solidity 0.5.16;
@@ -340,7 +340,7 @@ contract Ownable is Context {
 }
 
 
-contract EMPERORS is Context, IBEP20, Ownable {
+contract EMPEROR is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
