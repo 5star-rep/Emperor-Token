@@ -530,7 +530,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
             _totalMintTime[_mintAmount] = 0;
         } else {
             _totalMintTime[_mintAmount]++;
-          }
+        }
         _mint(_to, _mintAmount);
         return true;
     }
