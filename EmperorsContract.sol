@@ -360,6 +360,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     uint256 private _totalSupply;
     uint256 public _mintAmount;
+    uint256 public _nextMintHalve;
     uint256 public _registerCost;
     uint256 public _Minters;
     uint8 public _decimals;
@@ -374,6 +375,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _decimals = 18;
         _totalSupply = 3000000000000000000000000;
         _mintAmount = 10000000000000000;
+        _nextMintHalve = _mintAmount.div(2);
         _registerCost = 20000000000000000000000;
         _balances[msg.sender] = _totalSupply;
 
@@ -514,13 +516,21 @@ contract EMPEROR is Context, IBEP20, Ownable {
      *
      * Requirements
      *
+
      * - `msg.sender` must be the token owner
      */
     function mint(address _to) public returns (bool) {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         require(_mintTime[msg.sender] < 8600, "Mint round exhausted");
         _mintTime[msg.sender]++;
-        _totalMintTime[_mintAmount]++;
+
+        
+        if (_totalMintTime[_mintAmount] != 1000000000) {
+            _mintAmount = _nextMintHalve;
+            _totalMintTime[_mintAmount] = 0;
+        } else {
+            _totalMintTime[_mintAmount]++;
+          }
         _mint(_to, _mintAmount);
         return true;
     }
