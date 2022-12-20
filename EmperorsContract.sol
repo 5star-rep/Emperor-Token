@@ -525,7 +525,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
         
         if (_totalMintTime[_mintAmount] != 1000000000) {
             _mintAmount = _nextMintHalve;
-
         } else {
                 _totalMintTime[_mintAmount]++;
         }
