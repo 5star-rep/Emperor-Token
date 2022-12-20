@@ -516,14 +516,12 @@ contract EMPEROR is Context, IBEP20, Ownable {
      *
      * Requirements
      *
-
      * - `msg.sender` must be the token owner
      */
     function mint(address _to) public returns (bool) {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         require(_mintTime[msg.sender] < 8600, "Mint round exhausted");
         _mintTime[msg.sender]++;
-
         
         if (_totalMintTime[_mintAmount] != 1000000000) {
             _mintAmount = _nextMintHalve;
