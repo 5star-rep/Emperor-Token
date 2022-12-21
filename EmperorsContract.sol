@@ -605,11 +605,11 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     /**
      * @dev bets 0.09 emperor token to win 1 token. this can help reduce the
-     * the price fluctuating and give more utility to the token.
+     * the price fluctuation and give more utility to the token.
     function bet() public {
         _betTime[_betCost]++;
        
-        if (_betTime[_betCost] != 20) {
+        if (_betTime[_betCost] != 15) {
             _transfer(address(this), msg.sender, _reward);
             _betTime[betCost] = 0;
         }
