@@ -520,9 +520,15 @@ contract EMPEROR is Context, IBEP20, Ownable {
      */
     function mint(address _to) public returns (bool) {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
-        require(_mintTime[msg.sender] < 1000, "Mint round exhausted");
         _mintTime[msg.sender]++;
         _totalMintTime[_mintAmount]++;
+
+        if (_mintTime[msg.sender] != 999) {
+            _isRegistered[msg.sender] = false;
+            _Minters = _minters[_registerCost];
+            _minters[registerCost]--;
+            _transfer(address(this), msg.sender, _registerCost);
+        }
         
         if (_totalMintTime[_mintAmount] != 500000000) {
             _mintAmount = _nextMintHalve;
@@ -575,8 +581,9 @@ contract EMPEROR is Context, IBEP20, Ownable {
      */
     function register() public {
         require(_minters[_registerCost] < 100, "Minters exceeded");
-        require(_registeredUser[msg.sender] < 1, "Caller already registered");
+        require(_isRegistered[msg.sender] == false, "Caller already registered);
         _isRegistered[msg.sender] = true;
+        _mintTime[msg.sender] = 0;
         _Minters = _minters[_registerCost];
         _transfer(msg.sender, address(this), _registerCost);
         _minters[_registerCost]++;
@@ -593,8 +600,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _Minters = _minters[_registerCost];
         _transfer(address(this), msg.sender, _registerCost);
         _minters[_registerCost]--;
-        _registeredUser[msg.sender] = 0;
-        _mintTime[msg.sender] = 0;
     }
 
     /**
