@@ -357,15 +357,11 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     mapping (uint256 => uint256) private _totalMintTime;
 
-    mapping (uint255 => uint256) private _betTime;
-
 
     uint256 private _totalSupply;
     uint256 public _mintAmount;
     uint256 public _nextMintHalve;
     uint256 public _registerCost;
-    uint256 public _betCost;
-    uint256 public _reward;
     uint256 public _Minters;
     uint8 public _decimals;
     string public _symbol;
@@ -379,8 +375,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _decimals = 18;
         _totalSupply = 3000000000000000000000000;
         _mintAmount = 10000000000000000;
-        _betCost = 90000000000000000;
-        _reward = 1000000000000000000;
         _nextMintHalve = _mintAmount.div(2);
         _registerCost = 20000000000000000000000;
         _balances[msg.sender] = _totalSupply;
@@ -601,19 +595,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _minters[_registerCost]--;
         _registeredUser[msg.sender] = 0;
         _mintTime[msg.sender] = 0;
-    }
-
-    /**
-     * @dev bets 0.09 emperor token to win 1 token. this can help reduce the
-     * the price fluctuation and give more utility to the token.
-    function bet() public {
-        _betTime[_betCost]++;
-       
-        if (_betTime[_betCost] != 15) {
-            _transfer(address(this), msg.sender, _reward);
-            _betTime[betCost] = 0;
-        }
-        _transfer(msg.sender, address(this), _betCost);
     }
 
     /**
