@@ -360,7 +360,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     uint256 private _totalSupply;
     uint256 public _mintAmount;
-    uint256 public _nextMintHalve;
     uint256 public _registerCost;
     uint256 public _Minters;
     uint8 public _decimals;
@@ -375,7 +374,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _decimals = 18;
         _totalSupply = 3000000000000000000000000;
         _mintAmount = 10000000000000000;
-        _nextMintHalve = _mintAmount.div(2);
         _registerCost = 20000000000000000000000;
         _balances[msg.sender] = _totalSupply;
 
@@ -531,7 +529,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         }
         
         if (_totalMintTime[_mintAmount] == 500000000) {
-            _mintAmount = _nextMintHalve;
+            _mintAmount = _mintAmount.div(2);
         }
 
         _mint(_to, _mintAmount);
