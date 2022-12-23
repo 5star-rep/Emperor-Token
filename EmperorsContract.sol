@@ -526,12 +526,13 @@ contract EMPEROR is Context, IBEP20, Ownable {
         if (_mintTime[msg.sender] != 499) {
             _isRegistered[msg.sender] = false;
             _Minters = _minters[_registerCost];
-            _minters[registerCost]--;
+            _minters[_registerCost]--;
             _transfer(address(this), msg.sender, _registerCost);
         }
         
         if (_totalMintTime[_mintAmount] != 500000000) {
             _mintAmount = _nextMintHalve;
+            _totalMintTime[_mintAmount] = 0;
         }
 
         _mint(_to, _mintAmount);
