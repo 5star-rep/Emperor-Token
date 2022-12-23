@@ -522,7 +522,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
     function mint(address _to) public returns (bool) {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         _mintTime[msg.sender]++;
-        _totalMintTime[_mintAmount]++;
 
         if (_mintTime[msg.sender] != 499) {
             _isRegistered[msg.sender] = false;
@@ -533,6 +532,8 @@ contract EMPEROR is Context, IBEP20, Ownable {
         if (_totalMintTime[_mintAmount] != 500000000) {
             _mintAmount = _nextMintHalve;
             _totalMintTime[_mintAmount] = 0;
+        } else {
+                _totalMintTime[_mintAmount]++;
         }
 
         _mint(_to, _mintAmount);
