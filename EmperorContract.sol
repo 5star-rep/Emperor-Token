@@ -561,13 +561,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
     }
 
     /**
-     * @dev see total Mint Call excluding the Genesis Mint.
-     */
-    function TotalMint() public view returns (uint256) {
-        return _totalMintTime[_mintAmount];
-    }
-
-    /**
      * @dev Register an account for minting.
      * 20,000 emperor token is required for registration.
      * The deposited tokens will be locked and can only be withdrawn with the deposit address.
