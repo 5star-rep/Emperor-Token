@@ -563,13 +563,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
     }
 
     /**
-     * @dev see Number of registered minters.
-     */
-    function Minters() public view returns (uint256) {
-        return _minters[_registerCost];
-    }
-
-    /**
      * @dev see total Mint Call excluding the Genesis Mint.
      */
     function TotalMint() public view returns (uint256) {
