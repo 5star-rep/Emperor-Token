@@ -377,6 +377,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _mintAmount = 10000000000000000;
         _nextMintHalve = _mintAmount.div(2);
         _registerCost = 20000000000000000000000;
+        _Minters = _minters[_registerCost];
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -525,7 +526,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
         if (_mintTime[msg.sender] != 499) {
             _isRegistered[msg.sender] = false;
-            _Minters = _minters[_registerCost];
             _minters[_registerCost]--;
             _transfer(address(this), msg.sender, _registerCost);
         }
@@ -585,7 +585,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
         require(_isRegistered[msg.sender] == false, "Caller already registered);
         _isRegistered[msg.sender] = true;
         _mintTime[msg.sender] = 0;
-        _Minters = _minters[_registerCost];
         _transfer(msg.sender, address(this), _registerCost);
         _minters[_registerCost]++;
         _registeredUser[msg.sender]++;
@@ -598,7 +597,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
     function Unregister() public {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         _isRegistered[msg.sender] = false;
-        _Minters = _minters[_registerCost];
         _transfer(address(this), msg.sender, _registerCost);
         _minters[_registerCost]--;
     }
