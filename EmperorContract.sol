@@ -563,7 +563,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
      */
     function register() public {
         require(_minters < _maxMinters, "Minters exceeded");
-        require(_isRegistered[msg.sender] == false, "Caller already registered);
+        require(_isRegistered[msg.sender] == false, "Caller already registered");
         _isRegistered[msg.sender] = true;
         _mintTime[msg.sender] = 0;
         _transfer(msg.sender, address(this), _registerCost);
