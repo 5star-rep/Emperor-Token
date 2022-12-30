@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// File: github/5star-rep/Emperor-Token/EmperorsContract.sol
+// File: github/5star-rep/Emperor-Token/EmperorContract.sol
 
 pragma solidity 0.5.16;
 
