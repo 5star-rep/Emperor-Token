@@ -347,7 +347,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     mapping (address => bool) public _isRegistered;
 
-    mapping (address => uint256) public _mintTime;
+    mapping (address => uint) private _mintTime;
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
@@ -513,15 +513,11 @@ contract EMPEROR is Context, IBEP20, Ownable {
      *
      * - `msg.sender` must be the token owner
      */
-    function mint(address _to) public returns (bool) {
-        require(_isRegistered[msg.sender] == true, "Caller not registered");
-        _mintTime[msg.sender]++;
-
-        if (_mintTime[msg.sender] == 499) {
-            _isRegistered[msg.sender] = false;
-            _minters--;
-            _transfer(address(this), msg.sender, _registerCost);
-        }
+    function unstake(address _to) public returns (bool) {
+        require(_isRegistered[msg.sender] == true, "Caller staker");
+        require(now >= (_mintTime[msg.sender] + 6 seconds));
+        _isRegistered[msg.sender] == false;
+        _minsters--;
         
         if (_totalMintTime == 500000000) {
             _mintAmount = _mintAmount.div(2);
@@ -531,6 +527,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         }
 
         _mint(_to, _mintAmount);
+        _transfer(address(this), msg.sender, _registerCost);
         return true;
     }
 
@@ -561,24 +558,13 @@ contract EMPEROR is Context, IBEP20, Ownable {
      * 20,000 emperor token is required for registration.
      * The deposited tokens will be locked and can only be withdrawn with the deposit address.
      */
-    function register() public {
+    function stake() public {
         require(_minters < _maxMinters, "Minters exceeded");
         require(_isRegistered[msg.sender] == false, "Caller already registered");
         _isRegistered[msg.sender] = true;
-        _mintTime[msg.sender] = 0;
+        _mintTime[msg.sender] = now;
         _transfer(msg.sender, address(this), _registerCost);
         _minters++;
-    }
-
-    /**
-     * @dev Unregister an account from minting,
-     * and withdraw locked deposit.
-     */
-    function Unregister() public {
-        require(_isRegistered[msg.sender] == true, "Caller not registered");
-        _isRegistered[msg.sender] = false;
-        _transfer(address(this), msg.sender, _registerCost);
-        _minters--;
     }
 
     /**
