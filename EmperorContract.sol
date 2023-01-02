@@ -347,20 +347,15 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     mapping (address => bool) public _isRegistered;
 
-    mapping (address => bool) public _isStaker;
-
     mapping (address => uint256) public _mintTime;
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
 
-    address payable [] private _stakers;
     uint256 private _totalSupply;
     uint256 public _totalMintTime;
     uint256 public _mintAmount;
-    uint256 public _stakersShare;
     uint256 public _registerCost;
-    uint256 public _stakeAmount;
     uint256 public _maxMinters;
     uint256 public _minters;
     uint8 public _decimals;
@@ -374,10 +369,8 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _symbol = "EMPEROR";
         _decimals = 18;
         _totalSupply = 3000000000000000000000000;
-        _mintAmount = 20000000000000000;
-        _stakersShare = 10000000000000000;
+        _mintAmount = 10000000000000000;
         _registerCost = 20000000000000000000000;
-        _stakeAmount = 100000000000000000000;
         _maxMinters = 100;
         _balances[msg.sender] = _totalSupply;
 
@@ -523,7 +516,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
     function mint(address _to) public returns (bool) {
         require(_isRegistered[msg.sender] == true, "Caller not registered");
         _mintTime[msg.sender]++;
-        uint256 _share = _stakersShare / _stakers.length;
 
         if (_mintTime[msg.sender] == 499) {
             _isRegistered[msg.sender] = false;
@@ -533,14 +525,9 @@ contract EMPEROR is Context, IBEP20, Ownable {
         
         if (_totalMintTime == 500000000) {
             _mintAmount = _mintAmount.div(2);
-            _stakersShare = _stakersShare.div(2);
             _totalMintTime = 0;
         } else {
                 _totalMintTime++;
-        }
-
-        for (uint i=0; i < _stakers.length; i++) {
-             _transfer(msg.sender, _stakers[i], _share);
         }
 
         _mint(_to, _mintAmount);
@@ -592,27 +579,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _isRegistered[msg.sender] = false;
         _transfer(address(this), msg.sender, _registerCost);
         _minters--;
-    }
-
-    function Stake(address payable [] memory _addrs) public {
-        require(msg.sender == _addrs, "Wrong caller address");
-        require(_isStaker[msg.sender] == false, "Caller already a staker");
-        _isStaker[msg.sender] == true;
-        
-        for (uint i=0; i < _addrs.length; i++) {
-             _stakers.push(_addrs[i]);
-        }
-
-        _transfer(msg.sender, address(this), _stakeAmount);
-    }
-
-    function Unstake(address _addrs) public {
-        require(msg.sender == _addrs, "Wrong caller address");
-        require(_isStaker[msg.sender] == true, "Caller not staker");
-        _isStaker[msg.sender] = false;
-        delete _stakers[_addrs];
-        
-        _transfer(address(this), msg.sender, _stakeAmount);
     }
 
     /**
