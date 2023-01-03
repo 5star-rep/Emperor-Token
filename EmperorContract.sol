@@ -345,18 +345,18 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     mapping (address => uint256) private _balances;
 
-    mapping (address => bool) public _isStaker;
+    mapping (address => bool) public _isFarmer;
 
-    mapping (address => uint) public _stakeTime;
+    mapping (address => uint) public _farmTime;
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
 
     uint256 private _totalSupply;
-    uint256 public _totalUnstakeTime;
+    uint256 public _totalHarvestTime;
     uint256 public _reward;
-    uint256 public _stakeAmount;
-    uint256 public _stakers;
+    uint256 public _farmCost;
+    uint256 public _farmers;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
@@ -369,7 +369,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _decimals = 18;
         _totalSupply = 3000000000000000000000000;
         _reward = 560000000000000000000;
-        _stakeAmount = 20000000000000000000000;
+        _farmCost = 20000000000000000000000;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -509,23 +509,23 @@ contract EMPEROR is Context, IBEP20, Ownable {
      *
      * Requirements
      *
-     * - `msg.sender` must be a staker.
+     * - `msg.sender` must be a farmer.
      */
-    function unstake(address _to) public returns (bool) {
-        require(_isStaker[msg.sender] == true, "Caller not a staker");
-        require(now >= (_stakeTime[msg.sender] + 4 weeks));
-        _isStaker[msg.sender] = false;
-        _stakers--;
+    function harvest(address _to) public returns (bool) {
+        require(_isFarmer[msg.sender] == true, "Caller not a farmer");
+        require(now >= (_farmTime[msg.sender] + 4 weeks));
+        _isFarmer[msg.sender] = false;
+        _farmers--;
         
-        if (_totalUnstakeTime == 6000) {
+        if (_totalHarvestTime == 6000) {
             _reward = _reward.div(2);
-            _totalUnstakeTime = 0;
+            _totalHarvestTime = 0;
         } else {
-                _totalUnstakeTime++;
+                _totalHarvestTime++;
         }
 
         _mint(_to, _reward);
-        _transfer(address(this), _to, _stakeAmount);
+        _transfer(address(this), _to, _farmCost);
         return true;
     }
 
@@ -552,16 +552,16 @@ contract EMPEROR is Context, IBEP20, Ownable {
     }
 
     /**
-     * @dev deposits 20,000 emperor tokens for staking.
+     * @dev deposits 20,000 emperor tokens for farming.
      * The deposit will be locked for a period of 4 weeks
-     * and can only be withdrawn with the deposit address.
+     * and can only be withdrawn with the same deposit address.
      */
-    function stake() public {
-        require(_isStaker[msg.sender] == false, "Caller already staked");
-        _isStaker[msg.sender] = true;
-        _stakeTime[msg.sender] = now;
-        _transfer(msg.sender, address(this), _stakeAmount);
-        _stakers++;
+    function farm() public {
+        require(_isFarmer[msg.sender] == false, "Caller already farming");
+        _isFarmer[msg.sender] = true;
+        _farmTime[msg.sender] = now;
+        _transfer(msg.sender, address(this), _farmCost);
+        _farmers++;
     }
 
     /**
