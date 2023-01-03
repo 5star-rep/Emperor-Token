@@ -525,7 +525,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         }
 
         _mint(_to, _reward);
-        _transfer(address(this), msg.sender, _stakeAmount);
+        _transfer(address(this), _to, _stakeAmount);
         return true;
     }
 
