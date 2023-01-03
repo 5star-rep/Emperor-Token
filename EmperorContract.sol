@@ -368,7 +368,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _symbol = "EMPEROR";
         _decimals = 18;
         _totalSupply = 3000000000000000000000000;
-        _reward = 280000000000000000000;
+        _reward = 560000000000000000000;
         _stakeAmount = 20000000000000000000000;
         _balances[msg.sender] = _totalSupply;
 
@@ -517,7 +517,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _isStaker[msg.sender] = false;
         _stakers--;
         
-        if (_totalUnstakeTime == 50000000) {
+        if (_totalUnstakeTime == 6000) {
             _reward = _reward.div(2);
             _totalUnstakeTime = 0;
         } else {
