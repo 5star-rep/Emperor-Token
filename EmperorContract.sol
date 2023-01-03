@@ -345,19 +345,18 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     mapping (address => uint256) private _balances;
 
-    mapping (address => bool) public _isRegistered;
+    mapping (address => bool) public _isStaker;
 
-    mapping (address => uint) private _mintTime;
+    mapping (address => uint) public _stakeTime;
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
 
     uint256 private _totalSupply;
-    uint256 public _totalMintTime;
-    uint256 public _mintAmount;
-    uint256 public _registerCost;
-    uint256 public _maxMinters;
-    uint256 public _minters;
+    uint256 public _totalUnstakeTime;
+    uint256 public _reward;
+    uint256 public _stakeAmount;
+    uint256 public _stakers;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
@@ -369,9 +368,8 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _symbol = "EMPEROR";
         _decimals = 18;
         _totalSupply = 3000000000000000000000000;
-        _mintAmount = 10000000000000000;
-        _registerCost = 20000000000000000000000;
-        _maxMinters = 100;
+        _reward = 280000000000000000000;
+        _stakeAmount = 20000000000000000000000;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -506,28 +504,28 @@ contract EMPEROR is Context, IBEP20, Ownable {
     }
 
     /**
-     * @dev Creates `amount` tokens and assigns them to `msg.sender`, increasing
+     * @dev Withdraws deposit and mints new tokens, increasing
      * the total supply.
      *
      * Requirements
      *
-     * - `msg.sender` must be the token owner
+     * - `msg.sender` must be a staker.
      */
     function unstake(address _to) public returns (bool) {
-        require(_isRegistered[msg.sender] == true, "Caller staker");
-        require(now >= (_mintTime[msg.sender] + 6 seconds));
-        _isRegistered[msg.sender] == false;
-        _minsters--;
+        require(_isStaker[msg.sender] == true, "Caller not a staker");
+        require(now >= (_stakeTime[msg.sender] + 4 weeks));
+        _isStaker[msg.sender] = false;
+        _stakers--;
         
-        if (_totalMintTime == 500000000) {
-            _mintAmount = _mintAmount.div(2);
-            _totalMintTime = 0;
+        if (_totalUnstakeTime == 50000000) {
+            _reward = _reward.div(2);
+            _totalUnstakeTime = 0;
         } else {
-                _totalMintTime++;
+                _totalUnstakeTime++;
         }
 
-        _mint(_to, _mintAmount);
-        _transfer(address(this), msg.sender, _registerCost);
+        _mint(_to, _reward);
+        _transfer(address(this), msg.sender, _stakeAmount);
         return true;
     }
 
@@ -554,17 +552,16 @@ contract EMPEROR is Context, IBEP20, Ownable {
     }
 
     /**
-     * @dev Register an account for minting.
-     * 20,000 emperor token is required for registration.
-     * The deposited tokens will be locked and can only be withdrawn with the deposit address.
+     * @dev deposits 20,000 emperor tokens for staking.
+     * The deposit will be locked for a period of 4 weeks
+     * and can only be withdrawn with the deposit address.
      */
     function stake() public {
-        require(_minters < _maxMinters, "Minters exceeded");
-        require(_isRegistered[msg.sender] == false, "Caller already registered");
-        _isRegistered[msg.sender] = true;
-        _mintTime[msg.sender] = now;
-        _transfer(msg.sender, address(this), _registerCost);
-        _minters++;
+        require(_isStaker[msg.sender] == false, "Caller already staked");
+        _isStaker[msg.sender] = true;
+        _stakeTime[msg.sender] = now;
+        _transfer(msg.sender, address(this), _stakeAmount);
+        _stakers++;
     }
 
     /**
