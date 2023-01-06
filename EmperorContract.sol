@@ -517,7 +517,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _isFarmer[msg.sender] = false;
         _farmers--;
         
-        if (_totalHarvestTime == 6000) {
+        if (_totalHarvestTime == 7000) {
             _reward = _reward.div(2);
             _totalHarvestTime = 0;
         } else {
