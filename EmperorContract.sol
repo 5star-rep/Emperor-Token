@@ -519,7 +519,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         
         if (_totalHarvestTime == 10000) {
             _reward = _reward.div(2);
-            _totalHarvestTime = 0;
+            _totalHarvestTime = 1;
         } else {
                 _totalHarvestTime++;
         }
