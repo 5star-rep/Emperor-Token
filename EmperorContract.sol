@@ -365,6 +365,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
     uint256 public _poolCost;
     uint256 public _skakers;
     uint256 public _poolers;
+    uint256 public _stakes;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
@@ -526,6 +527,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         require(now >= (_stakeTime[msg.sender] + 4 weeks));
         _isStaker[msg.sender] = false;
         _stakers--;
+        _stakes.sub(20000);
         
         if (_totalUnstakeTime == 10000) {
             _stakeReward = _stakeReward.div(2);
@@ -552,6 +554,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         require(now >= (_poolTime[msg.sender] + 4 weeks));
         _isPooler[msg.sender] = false;
         _poolers--;
+        _stakes.sub(500);
         
         if (_totalExitPoolTime == 400000) {
             _poolReward = _poolReward.div(2);
@@ -598,6 +601,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _stakeTime[msg.sender] = now;
         _transfer(msg.sender, address(this), _stakeCost);
         _stakers++;
+        _stakes.add(20000);
     }
 
     /**
@@ -611,6 +615,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _poolTime[msg.sender] = now;
         _transfer(msg.sender, address(this), _poolCost);
         _poolers++;
+        _stakes.add(500);
     }
 
     /**
