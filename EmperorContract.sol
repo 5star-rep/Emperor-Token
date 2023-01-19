@@ -347,7 +347,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     mapping (address => bool) public _isStaker;
 
-    mapping (address => bool) public isPooler;
+    mapping (address => bool) public _isPooler;
 
     mapping (address => uint) public _stakeTime;
 
@@ -363,7 +363,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
     uint256 public _poolReward;
     uint256 public _stakeCost;
     uint256 public _poolCost;
-    uint256 public _skakers;
+    uint256 public _stakers;
     uint256 public _poolers;
     uint256 public _stakes;
     uint8 public _decimals;
