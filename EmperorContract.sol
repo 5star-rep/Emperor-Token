@@ -592,7 +592,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     /**
      * @dev deposits 20,000 emperor tokens for staking.
-     * The deposit will be locked for a period of 4 weeks or 28 days
+     * The deposit will be locked for a period of 28 days or 2,419,200 seconds
      * and can only be withdrawn with the same deposit address.
      */
     function stake() public {
@@ -606,7 +606,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     /**
      * @dev deposits 500 emperor tokens to join pool staking.
-     * The deposit will be locked for a period of 4 weeks or 28 days
+     * The deposit will be locked for a period of 28 days or 2,419,200 seconds
      * and can only be withdrawn with the same deposit address.
      */
     function joinPool() public {
