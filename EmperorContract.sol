@@ -372,11 +372,11 @@ contract EMPEROR is Context, IBEP20, Ownable {
     string public _genesisMint;
 
     constructor() public {
-        _genesisMint = "3 million tokens";
+        _genesisMint = "5 million tokens";
         _name = "EMPEROR";
         _symbol = "EMPEROR";
         _decimals = 18;
-        _totalSupply = 3000000000000000000000000;
+        _totalSupply = 5000000000000000000000000;
         _stakeReward = 560000000000000000000;
         _poolReward = 14000000000000000000;
         _stakeCost = 20000000000000000000000;
@@ -524,7 +524,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
      */
     function unstake(address _to) public returns (bool) {
         require(_isStaker[msg.sender] == true, "Caller not a staker");
-        require(now >= (_stakeTime[msg.sender] + 4 weeks));
+        require(now >= (_stakeTime[msg.sender] + 28 days));
         _isStaker[msg.sender] = false;
         _stakers--;
         _stakes.sub(20000);
@@ -551,7 +551,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
      */
     function exitPool(address _to) public returns (bool) {
         require(_isPooler[msg.sender] == true, "Caller not a pooler");
-        require(now >= (_poolTime[msg.sender] + 4 weeks));
+        require(now >= (_poolTime[msg.sender] + 28 days));
         _isPooler[msg.sender] = false;
         _poolers--;
         _stakes.sub(500);
@@ -592,7 +592,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     /**
      * @dev deposits 20,000 emperor tokens for staking.
-     * The deposit will be locked for a period of 4 weeks
+     * The deposit will be locked for a period of 4 weeks or 28 days
      * and can only be withdrawn with the same deposit address.
      */
     function stake() public {
@@ -606,7 +606,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     /**
      * @dev deposits 500 emperor tokens to join pool staking.
-     * The deposit will be locked for a period of 4 weeks
+     * The deposit will be locked for a period of 4 weeks or 28 days
      * and can only be withdrawn with the same deposit address.
      */
     function joinPool() public {
