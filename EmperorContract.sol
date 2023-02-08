@@ -347,24 +347,16 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     mapping (address => bool) public _isStaker;
 
-    mapping (address => bool) public _isPooler;
-
     mapping (address => uint) public _stakeTime;
-
-    mapping (address => uint) public _poolTime;
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
 
     uint256 private _totalSupply;
     uint256 public _totalUnstakeTime;
-    uint256 public _totalExitPoolTime;
     uint256 public _stakeReward;
-    uint256 public _poolReward;
     uint256 public _stakeCost;
-    uint256 public _poolCost;
     uint256 public _stakers;
-    uint256 public _poolers;
     uint256 public _stakes;
     uint8 public _decimals;
     string public _symbol;
@@ -372,15 +364,13 @@ contract EMPEROR is Context, IBEP20, Ownable {
     string public _genesisMint;
 
     constructor() public {
-        _genesisMint = "5 million tokens";
+        _genesisMint = "10 million tokens";
         _name = "EMPEROR";
         _symbol = "EMPEROR";
         _decimals = 18;
-        _totalSupply = 5000000000000000000000000;
-        _stakeReward = 560000000000000000000;
-        _poolReward = 14000000000000000000;
-        _stakeCost = 20000000000000000000000;
-        _poolCost = 500000000000000000000;
+        _totalSupply = 10000000000000000000000000;
+        _stakeReward = 100000000000000000000;
+        _stakeCost = 2000000000000000000000;
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -527,7 +517,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         require(now >= (_stakeTime[msg.sender] + 28 days));
         _isStaker[msg.sender] = false;
         _stakers--;
-        _stakes.sub(20000);
+        _stakes.sub(2000);
         
         if (_totalUnstakeTime == 10000) {
             _stakeReward = _stakeReward.div(2);
@@ -538,33 +528,6 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
         _mint(_to, _stakeReward);
         _transfer(address(this), _to, _stakeCost);
-        return true;
-    }
-
-    /**
-     * @dev Withdraws pool deposit and mints new tokens, increasing
-     * the total supply.
-     *
-     * Requirements
-     *
-     * - `msg.sender` must be a pooler.
-     */
-    function exitPool(address _to) public returns (bool) {
-        require(_isPooler[msg.sender] == true, "Caller not a pooler");
-        require(now >= (_poolTime[msg.sender] + 28 days));
-        _isPooler[msg.sender] = false;
-        _poolers--;
-        _stakes.sub(500);
-        
-        if (_totalExitPoolTime == 400000) {
-            _poolReward = _poolReward.div(2);
-            _totalExitPoolTime = 1;
-        } else {
-                _totalExitPoolTime++;
-        }
-
-        _mint(_to, _poolReward);
-        _transfer(address(this), _to, _poolCost);
         return true;
     }
 
@@ -591,7 +554,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
     }
 
     /**
-     * @dev deposits 20,000 emperor tokens for staking.
+     * @dev deposits 2000 emperor tokens for staking.
      * The deposit will be locked for a period of 28 days or 2,419,200 seconds
      * and can only be withdrawn with the same deposit address.
      */
@@ -601,21 +564,7 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _stakeTime[msg.sender] = now;
         _transfer(msg.sender, address(this), _stakeCost);
         _stakers++;
-        _stakes.add(20000);
-    }
-
-    /**
-     * @dev deposits 500 emperor tokens to join pool staking.
-     * The deposit will be locked for a period of 28 days or 2,419,200 seconds
-     * and can only be withdrawn with the same deposit address.
-     */
-    function joinPool() public {
-        require(_isPooler[msg.sender] == false, "Caller already joined");
-        _isPooler[msg.sender] = true;
-        _poolTime[msg.sender] = now;
-        _transfer(msg.sender, address(this), _poolCost);
-        _poolers++;
-        _stakes.add(500);
+        _stakes.add(2000);
     }
 
     /**
