@@ -363,8 +363,8 @@ contract EMPEROR is Context, IBEP20, Ownable {
         _name = "EMPEROR";
         _symbol = "EMPEROR";
         _decimals = 18;
-        _totalSupply = 30000000000000000000000000;
-        _stakeCost = 10000000000000000000000;
+        _totalSupply = 30000000000000000000000000; // 30 million tokens
+        _stakeCost = 10000000000000000000000; // 10 thousand tokens
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
