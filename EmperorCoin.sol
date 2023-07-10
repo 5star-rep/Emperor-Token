@@ -360,8 +360,8 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     constructor() public {
         _genesisMint = "30 million tokens";
-        _name = "EMPEROR";
-        _symbol = "EMPEROR";
+        _name = "PEPEMONKEY";
+        _symbol = "PPM";
         _decimals = 18;
         _totalSupply = 30000000000000000000000000; // 30 million tokens
         _stakeCost = 10000000000000000000000; // 10 thousand tokens
