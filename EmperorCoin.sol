@@ -343,14 +343,16 @@ contract Ownable is Context {
 }
 
 
-contract EMPEROR is Context, IBEP20, Ownable {
+contract FANTOKEN is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
+    address public _dead;
     uint256 private _totalSupply;
+    uint256 public _maxSupply;
     uint256 public _stakeCost;
     uint256 public Stakers;
     uint8 public _decimals;
@@ -358,13 +360,15 @@ contract EMPEROR is Context, IBEP20, Ownable {
     string public _name;
     string public _genesisMint;
 
-    constructor() public {
-        _genesisMint = "30 million tokens";
-        _name = "PEPEMONKEY";
-        _symbol = "PPM";
+    constructor(address dead) public {
+        _dead = dead;
+        _genesisMint = "50 thousand tokens";
+        _name = "FanToken";
+        _symbol = "FTK";
         _decimals = 18;
-        _totalSupply = 30000000000000000000000000; // 30 million tokens
-        _stakeCost = 10000000000000000000000; // 10 thousand tokens
+        _totalSupply = 50000000000000000000000; // 50 thousand tokens
+        _maxSupply = 21000000000000000000000000; // 21 million wrap tokens to ever exist
+        _stakeCost = 1000000000000000000000; // 1 thousand tokens
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -510,14 +514,14 @@ contract EMPEROR is Context, IBEP20, Ownable {
      * @dev display Dev. Team
      */
     function Team() public pure returns (string memory) {
-        return '5 STAR Organization';
+        return 'Lads From The East';
     }
 
     /**
      * @dev display Founder.
      */
     function Founder() public pure returns (string memory) {
-        return 'Oge Ifeluo';
+        return 'OGE';
     }
 
     // Staker info
@@ -535,6 +539,9 @@ contract EMPEROR is Context, IBEP20, Ownable {
 
     // Rewards per hour per token deposited in wei.
     uint256 private rewardsPerHour = 300000000000000000; // 0.3 token per hour
+
+    // Auto burning on every reward claim
+    uint256 public burnAmount = 10000000000000000000; // 10 tokens to be burnt on every claim
 
     // Mapping of User Address to Staker info
     mapping(address => Staker) public stakers;
@@ -591,12 +598,14 @@ contract EMPEROR is Context, IBEP20, Ownable {
     // Calculate rewards for the msg.sender, check if there are any rewards
     // claim, set unclaimedRewards to 0 and transfer the ERC20 Reward token
     // to the user.
+    // The auto burning occurs here
     function claimRewards() public {
         uint256 rewards = calculateRewards(msg.sender) +
             stakers[msg.sender].unclaimedRewards;
         require(rewards > 0, "You have no rewards to claim");
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
         stakers[msg.sender].unclaimedRewards = 0;
+        _transfer(msg.sender, _dead, burnAmount);
         _mint(msg.sender, rewards);
     }
 
