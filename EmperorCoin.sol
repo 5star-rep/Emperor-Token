@@ -367,7 +367,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
         _symbol = "FTK";
         _decimals = 18;
         _totalSupply = 50000000000000000000000; // 50 thousand tokens
-        _maxSupply = 21000000000000000000000000; // 21 million wrap tokens to ever exist
+        _maxSupply = 21000000000000000000000000; // 21 million Fan tokens to ever exist
         _stakeCost = 1000000000000000000000; // 1 thousand tokens
         _balances[msg.sender] = _totalSupply;
 
