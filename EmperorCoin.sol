@@ -603,6 +603,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
         uint256 rewards = calculateRewards(msg.sender) +
             stakers[msg.sender].unclaimedRewards;
         require(rewards > 0, "You have no rewards to claim");
+        require(_maxSupply > _totalSupply + rewards);
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
         stakers[msg.sender].unclaimedRewards = 0;
         _transfer(msg.sender, _dead, burnAmount);
