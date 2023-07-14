@@ -540,8 +540,8 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     // Rewards per hour per token deposited in wei.
     uint256 private rewardsPerHour = 300000000000000000; // 0.3 token per hour
 
-    // Auto burning on every reward claim
-    uint256 public burnAmount = 10000000000000000000; // 10 tokens to be burnt on every claim
+    // Auto burning mechanism on every reward claim
+    string public burnMech = "rewards are divided by 10";
 
     // Mapping of User Address to Staker info
     mapping(address => Staker) public stakers;
@@ -601,6 +601,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     // The auto burning occurs here
     function claimRewards() public {
         uint256 rewards = calculateRewards(msg.sender) +
+        uint256 burnAmount = rewards.div(10);
             stakers[msg.sender].unclaimedRewards;
         require(rewards > 0, "You have no rewards to claim");
         require(_maxSupply > (_totalSupply + rewards));
