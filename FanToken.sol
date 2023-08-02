@@ -608,13 +608,13 @@ contract FANTOKEN is Context, IBEP20, Ownable {
             rewardsPerHour = rewardsPerHour.div(2);
         } else if (_totalSupply >= 8000000000000000000000000) {
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 12000000000000000000000000);
+        } else if (_totalSupply >= 12000000000000000000000000) {
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 16000000000000000000000000);
+        } else if (_totalSupply >= 16000000000000000000000000) {
                    rewardsPerHer = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 20000000000000000000000000);
+        } else if (_totalSupply >= 20000000000000000000000000) {
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 24000000000000000000000000);
+        } else if (_totalSupply >= 24000000000000000000000000) {
                    rewardsPerHour = rewardsPerHour.div(2);
         }
 
