@@ -1,4 +1,4 @@
-
+ 
 // File: github/5star-rep/Emperor_Token_A-solution-to-keep-whales-on-check/EmperorCoin.sol
 
 
@@ -603,6 +603,17 @@ contract FANTOKEN is Context, IBEP20, Ownable {
         uint256 rewards = calculateRewards(msg.sender) +
         uint256 burnAmount = rewards.div(10);
             stakers[msg.sender].unclaimedRewards;
+
+        if (_totalSupply >= 4000000000000000000000000) {
+            rewardsPerHour = rewardsPerHour.div(2);
+        } else if (_totalSupply >= 8000000000000000000000000) {
+                   rewardsPerHour = rewardsPerHour.div(2);
+        } else if (_totalSupply + rewards) >= 12000000000000000000000000);
+                   rewardsPerHour = rewardsPerHour.div(2);
+        } else if (_totalSupply + rewards) >= 14000000000000000000000000);
+                   rewardsPerHer = rewardsPerHour.div(2);
+        } else if {
+               NJ
         require(rewards > 0, "You have no rewards to claim");
         require(_maxSupply > (_totalSupply + rewards));
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
