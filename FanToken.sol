@@ -367,7 +367,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
         _symbol = "FTK";
         _decimals = 18;
         _totalSupply = 50000000000000000000000; // 50 thousand tokens
-        _maxSupply = 21000000000000000000000000; // 21 million Fan tokens to ever exist
+        _maxSupply = 25000000000000000000000000; // 25 million Fan tokens to ever exist
         _stakeCost = 1000000000000000000000; // 1 thousand tokens
         _balances[msg.sender] = _totalSupply;
 
@@ -608,12 +608,16 @@ contract FANTOKEN is Context, IBEP20, Ownable {
             rewardsPerHour = rewardsPerHour.div(2);
         } else if (_totalSupply >= 8000000000000000000000000) {
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply + rewards) >= 12000000000000000000000000);
+        } else if (_totalSupply >= 12000000000000000000000000);
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply + rewards) >= 14000000000000000000000000);
+        } else if (_totalSupply >= 16000000000000000000000000);
                    rewardsPerHer = rewardsPerHour.div(2);
-        } else if {
-               NJ
+        } else if (_totalSupply >= 20000000000000000000000000);
+                   rewardsPerHour = rewardsPerHour.div(2);
+        } else if (_totalSupply >= 24000000000000000000000000);
+                   rewardsPerHour = rewardsPerHour.div(2);
+        }
+
         require(rewards > 0, "You have no rewards to claim");
         require(_maxSupply > (_totalSupply + rewards));
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
