@@ -601,9 +601,10 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     // The auto burning occurs here
     function claimRewards() public {
         uint256 rewards = calculateRewards(msg.sender) +
+            stakers[msg sender].unclaimedRewards;
         uint256 burnAmount = rewards.div(10);
-            stakers[msg.sender].unclaimedRewards;
-
+        
+        // The halving mechanism 
         if (_totalSupply >= 4000000000000000000000000) {
             rewardsPerHour = rewardsPerHour.div(2);
         } else if (_totalSupply >= 8000000000000000000000000) {
