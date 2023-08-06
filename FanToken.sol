@@ -362,13 +362,13 @@ contract FANTOKEN is Context, IBEP20, Ownable {
 
     constructor(address dead) public {
         _dead = dead;
-        _genesisMint = "50 thousand tokens";
+        _genesisMint = "3 million tokens";
         _name = "FanToken";
         _symbol = "FTK";
         _decimals = 18;
-        _totalSupply = 50000000000000000000000; // 50 thousand tokens
+        _totalSupply = 3000000000000000000000000; // 3 million tokens
         _maxSupply = 25000000000000000000000000; // 25 million Fan tokens to ever exist
-        _stakeCost = 1000000000000000000000; // 1 thousand tokens
+        _stakeCost = 5000000000000000000000; // 5 thousand tokens
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
