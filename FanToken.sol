@@ -540,7 +540,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     }
 
     // Rewards per hour per token deposited in wei.
-    uint256 private rewardsPerHour = 2000000000000000000; // 2 token per hour
+    uint256 private rewardsPerHour = 1000000000000000000; // 1 token per hour
 
     // Auto burning mechanism on every reward claim
     string public burnMech = "rewards are divided by 3";
