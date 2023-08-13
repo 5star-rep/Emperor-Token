@@ -350,18 +350,19 @@ contract FANTOKEN is Context, IBEP20, Ownable {
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
-    address public _dead;
+    address public _pool;
     uint256 private _totalSupply;
     uint256 public _maxSupply;
     uint256 public _stakeCost;
+    uint256 public _halvetresh;
     uint256 public Stakers;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
     string public _genesisMint;
 
-    constructor(address dead) public {
-        _dead = dead;
+    constructor(address pool) public {
+        _pool = pool;
         _genesisMint = "3 million tokens";
         _name = "FanToken";
         _symbol = "FTK";
@@ -369,6 +370,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
         _totalSupply = 3000000000000000000000000; // 3 million tokens
         _maxSupply = 25000000000000000000000000; // 25 million Fan tokens to ever exist
         _stakeCost = 5000000000000000000000; // 5 thousand tokens
+        _halvetresh = 4000000000000000000000000; // rewards halving in every 4 million new tokens mint
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
@@ -538,10 +540,10 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     }
 
     // Rewards per hour per token deposited in wei.
-    uint256 private rewardsPerHour = 300000000000000000; // 0.3 token per hour
+    uint256 private rewardsPerHour = 2000000000000000000; // 2 token per hour
 
     // Auto burning mechanism on every reward claim
-    string public burnMech = "rewards are divided by 10";
+    string public burnMech = "rewards are divided by 3";
 
     // Mapping of User Address to Staker info
     mapping(address => Staker) public stakers;
@@ -602,28 +604,34 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     function claimRewards() public {
         uint256 rewards = calculateRewards(msg.sender) +
             stakers[msg sender].unclaimedRewards;
-        uint256 burnAmount = rewards.div(10);
+        uint256 burnAmount = rewards.div(3);
         
         // The halving mechanism 
-        if (_totalSupply >= 4000000000000000000000000) {
+        if (_halvetresh <= (_totalSupply + rewards)) {
             rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 8000000000000000000000000) {
+            _halvetresh = _halvetresh + 4000000000000000000000000;
+        } else if (_halvetresh <= (_totalSupply + rewards)) {
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 12000000000000000000000000) {
+                   _halvetresh = _halvetresh + 4000000000000000000000000;
+        } else if (_halvetresh <= (_totalSupply + rewards)) {
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 16000000000000000000000000) {
+                   _halvetresh = _halvetresh + 4000000000000000000000000;
+        } else if (_halvetresh <= (_totalSupply + rewards)) {
                    rewardsPerHer = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 20000000000000000000000000) {
+                   _halvetreh = _halvetresh + 4000000000000000000000000;
+        } else if (_halvetresh <= (_totalSupply + rewards)) {
                    rewardsPerHour = rewardsPerHour.div(2);
-        } else if (_totalSupply >= 24000000000000000000000000) {
+                   _halvetresh = _halvetresh + 4000000000000000000000000;
+        } else if (_halvetresh <= (_totalSupply + rewards)) {
                    rewardsPerHour = rewardsPerHour.div(2);
+                   _halvetresh = _halvetresh + 4000000000000000000000000;
         }
 
         require(rewards > 0, "You have no rewards to claim");
         require(_maxSupply >= (_totalSupply + rewards));
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
         stakers[msg.sender].unclaimedRewards = 0;
-        _transfer(msg.sender, _dead, burnAmount);
+        _transfer(msg.sender, _pool, burnAmount);
         _mint(msg.sender, rewards);
     }
 
