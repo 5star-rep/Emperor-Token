@@ -359,6 +359,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     uint8 public _decimals;
     string public _symbol;
     string public _name;
+    string public _MaxSupply;
     string public _genesisMint;
 
     constructor(address pool) public {
@@ -366,6 +367,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
         _genesisMint = "3 million tokens";
         _name = "FanToken";
         _symbol = "FTK";
+        _MaxSupply = "25 million tokens";
         _decimals = 18;
         _totalSupply = 3000000000000000000000000; // 3 million tokens
         _maxSupply = 25000000000000000000000000; // 25 million Fan tokens to ever exist
@@ -542,8 +544,8 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     // Rewards per hour per token deposited in wei.
     uint256 private rewardsPerHour = 1000000000000000000; // 1 token per hour
 
-    // Auto burning mechanism on every reward claim
-    string public burnMech = "rewards are divided by 3";
+    // Auto pool distribution mechanism on every reward claim
+    string public rewardTax = "rewards are divided by 3";
 
     // Mapping of User Address to Staker info
     mapping(address => Staker) public stakers;
@@ -600,11 +602,11 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     // Calculate rewards for the msg.sender, check if there are any rewards
     // claim, set unclaimedRewards to 0 and transfer the ERC20 Reward token
     // to the user.
-    // The auto burning occurs here
+    // The auto pool distribution occurs here
     function claimRewards() public {
         uint256 rewards = calculateRewards(msg.sender) +
             stakers[msg sender].unclaimedRewards;
-        uint256 burnAmount = rewards.div(3);
+        uint256 poolShare = rewards.div(3);
         
         // The halving mechanism 
         if (_halvetresh <= (_totalSupply + rewards)) {
@@ -631,7 +633,7 @@ contract FANTOKEN is Context, IBEP20, Ownable {
         require(_maxSupply >= (_totalSupply + rewards));
         stakers[msg.sender].timeOfLastUpdate = block.timestamp;
         stakers[msg.sender].unclaimedRewards = 0;
-        _transfer(msg.sender, _pool, burnAmount);
+        _transfer(msg.sender, _pool, poolShare);
         _mint(msg.sender, rewards);
     }
 
