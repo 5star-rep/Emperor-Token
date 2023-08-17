@@ -528,6 +528,11 @@ contract FINANCE is Context, IBEP20, Ownable {
         return 'OGE';
     }
 
+    // adding pool address to the contract
+    function SetPool(address Pool) public onlyOwner {
+        _pool = Pool;
+    }
+
     // Staker info
     struct Staker {
         // Amount of tokens staked by the staker
