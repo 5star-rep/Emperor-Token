@@ -343,7 +343,7 @@ contract Ownable is Context {
 }
 
 
-contract FANTOKEN is Context, IBEP20, Ownable {
+contract FINANCE is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
@@ -365,8 +365,8 @@ contract FANTOKEN is Context, IBEP20, Ownable {
     constructor(address pool) public {
         _pool = pool;
         _genesisMint = "3 million tokens";
-        _name = "FanToken";
-        _symbol = "FTK";
+        _name = "Fincoin";
+        _symbol = "FIN";
         _MaxSupply = "25 million tokens";
         _decimals = 18;
         _totalSupply = 3000000000000000000000000; // 3 million tokens
