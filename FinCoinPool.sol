@@ -514,11 +514,11 @@ contract FINPOOL {
     }
 
     function Team() public pure returns (string memory) {
-        return 'Lads from the East';
+        return 'Lads From The East';
     }
 
     function Founder() public pure returns (string memory) {
-        return 'OG';
+        return 'OGE';
     }
 
     receive() payable external {
