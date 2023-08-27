@@ -377,8 +377,8 @@ contract POPPCOIN is Context, IBEP20, Ownable {
         _symbol = "POP";
         _decimals = 18;
         _totalSupply = 1000000000000000000000000; // 1,000,000 token
-        _cost = 100000000000000000; // 0.1 token
-        _jackPot = 3000000000000000000; // 3 tokens
+        _cost = 500000000000000000; // 0.5 token
+        _jackPot = 5000000000000000000; // 5 tokens
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
