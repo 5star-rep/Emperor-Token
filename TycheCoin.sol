@@ -360,11 +360,14 @@ contract TYCHE is Context, IBEP20, Ownable {
     uint256 private _totalSupply;
     uint256 public _circSupply;
     uint256 public _cost;
+    uint256 public _stake;
     uint256 public _jackPot;
+    uint256 public _reward;
     uint256 public _luckyNO;
     uint256 public _round;
     uint256 private _totalTry;
     uint256 public _totalValue;
+    uint256 public _renounced;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
@@ -379,8 +382,8 @@ contract TYCHE is Context, IBEP20, Ownable {
         _symbol = "TYC";
         _decimals = 18;
         _totalSupply = 1000000000000000000000000; // 1,000,000 token
-        _cost = 500000000000000000; // 0.5 token
-        _jackPot = 5000000000000000000; // 5 tokens
+        _stake = 500000000000000000; // 0.5 token
+        _reward = 5000000000000000000; // 5 tokens
         _balances[msg.sender] = _totalSupply;
         _totalValue = msg.value;
 
@@ -520,11 +523,17 @@ contract TYCHE is Context, IBEP20, Ownable {
     }
 
     function setMainnet() public onlyOwner {
+        require(_renounced < 1);
+        _renounced++;
         ismainnet = !ismainnet;
     }
 
     function startPlay() public onlyOwner {
         isplayable = !isplayable;
+    }
+
+    function setCost(uint256 cost) public onlyOwner {
+        _cost = cost;
     }
 
     function setJackPot(uint256 jackpot) public onlyOwner {
@@ -540,7 +549,7 @@ contract TYCHE is Context, IBEP20, Ownable {
     }
 
     function PLAY(uint256 _no) public {
-        require(_balances[address(this)] >= _jackPot, "insufficient liquidity");
+        require(_balances[address(this)] >= _reward, "insufficient liquidity");
 
         uint256 luckyno = tryTime[msg.sender] + 3 - _totalTry;
         _luckyNO = luckyno;
@@ -549,13 +558,13 @@ contract TYCHE is Context, IBEP20, Ownable {
             _round++;
             _winRate[msg.sender]++;
             _roundWinners[_round] = msg.sender;
-            _circSupply.add(_jackPot);
-            _transfer(address(this), msg.sender, _jackPot);
+            _circSupply.add(_reward);
+            _transfer(address(this), msg.sender, _reward);
         }
 
         if (ismainnet == true) {
-            _circSupply.sub(_cost);
-            _transfer(msg.sender, _dead, _cost);
+            _circSupply.sub(_stake);
+            _transfer(msg.sender, _dead, _stake);
         }
 
         if (_tryTime[msg.sender] = 3) {
@@ -572,9 +581,10 @@ contract TYCHE is Context, IBEP20, Ownable {
     }
 
     function PLAYCORE(uint256 _no) public payable {
-        require(_totalValue > 0, "insufficient liquidity");
+        require(_totalValue >= _jackPot, "insufficient liquidity");
         require(msg.value >= _cost, "wrong value");
         require(isplayable, "play not enabled");
+        _totalValue += _cost;
 
         uint256 luckyno = tryTime[msg.sender] + 3 - _totalTry;
         _luckyNO = luckyno;
