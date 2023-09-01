@@ -378,7 +378,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
         _symbol = "BET";
         _decimals = 18;
         _totalSupply = 1000000000000000000000000; // 1,000,000 token
-        _stake = 200000000000000000; // 0.2 token
+        _stake = 500000000000000000; // 0.5 token
         _reward = 5000000000000000000; // 5 tokens
         _balances[msg.sender] = _totalSupply;
         _totalValue = msg.value;
@@ -521,7 +521,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
     function PLAY(uint256 _no) public {
         require(_balances[address(this)] >= _reward, "insufficient liquidity");
 
-        uint256 luckyno = tryTime[msg.sender] + _totalTry - 1;
+        uint256 luckyno = _tryTime[msg.sender] + _totalTry - 1;
         _luckyNO = luckyno;
 
         if (_no == luckyno) {
