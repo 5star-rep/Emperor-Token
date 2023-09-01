@@ -1,8 +1,8 @@
 
-// File: github/5star-rep/Emperor_Token_A-solution-to-keep-whales-on-check/EmperorContract.sol
+// File: github/5star-rep/Bet_Token_A-solution-to-keep-whales-on-check/BetContract.sol
 
 
-// File: github/5star-rep/Emperor-Token/EmperorContract.sol
+// File: github/5star-rep/Bet-Token/BetacoinContract.sol
 
 pragma solidity 0.5.16;
 
