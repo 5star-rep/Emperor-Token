@@ -2,7 +2,7 @@
 // File: github/5star-rep/Bet_Token_A-solution-to-keep-whales-on-check/BetContract.sol
 
 
-// File: github/5star-rep/Bet-Token/BetacoinContract.sol
+// File: github/5star-rep/Bet-Token/BetCoinContract.sol
 
 pragma solidity 0.5.16;
 
