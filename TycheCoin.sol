@@ -343,7 +343,7 @@ contract Ownable is Context {
 }
 
 
-contract TYCHE is Context, IBEP20, Ownable {
+contract BETCOIN is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
@@ -374,8 +374,8 @@ contract TYCHE is Context, IBEP20, Ownable {
     constructor(address dead) public payable {
         _dead = dead;
         _genesisMint = "1 million tokens";
-        _name = "TycheCoin";
-        _symbol = "TYC";
+        _name = "BetCoin";
+        _symbol = "BET";
         _decimals = 18;
         _totalSupply = 1000000000000000000000000; // 1,000,000 token
         _stake = 200000000000000000; // 0.2 token
@@ -528,16 +528,16 @@ contract TYCHE is Context, IBEP20, Ownable {
             _round++;
             _winRate[msg.sender]++;
             _roundWinners[_round] = msg.sender;
-            _circSupply.add(_reward);
+            _circSupply = _circSupply.add(_reward);
             _transfer(address(this), msg.sender, _reward);
         }
 
-        if (_round == 100) {
+        if (_round == 10) {
             ismainnet = !ismainnet;
         }
 
         if (ismainnet == true) {
-            _circSupply.sub(_stake);
+            _circSupply = _circSupply.sub(_stake);
             _transfer(msg.sender, _dead, _stake);
         }
 
