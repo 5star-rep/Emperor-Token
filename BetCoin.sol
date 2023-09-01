@@ -541,7 +541,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
             _transfer(msg.sender, _dead, _stake);
         }
 
-        if (_tryTime[msg.sender] = 4) {
+        if (_tryTime[msg.sender] == 4) {
             _tryTime[msg.sender] = 1;
         } else {
                 _tryTime[msg.sender]++;
