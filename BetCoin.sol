@@ -537,6 +537,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
         }
 
         if (ismainnet == true) {
+            require(_balances[msg.sender] >= _stake, "insufficient balance to play");
             _circSupply = _circSupply.sub(_stake);
             _transfer(msg.sender, _dead, _stake);
         }
