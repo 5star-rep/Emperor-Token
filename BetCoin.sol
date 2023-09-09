@@ -352,7 +352,11 @@ contract BETCOIN is Context, IBEP20, Ownable {
 
     mapping (address => uint256) public _winRate;
 
+    mapping (address => uint256) public _potRate;
+
     mapping (uint256 => address) public _roundWinners;
+
+    mapping (uint256 => address) public _potWinners;
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
@@ -360,9 +364,13 @@ contract BETCOIN is Context, IBEP20, Ownable {
     uint256 private _totalSupply;
     uint256 public _circSupply;
     uint256 public _stake;
+    uint256 public _bet;
     uint256 public _reward;
+    uint256 public _jackPot;
     uint256 public _luckyNO;
     uint256 public _round;
+    uint256 public _pot;
+    uint256 private _passcode;
     uint256 private _totalTry;
     uint256 public _totalValue;
     uint8 public _decimals;
@@ -371,8 +379,9 @@ contract BETCOIN is Context, IBEP20, Ownable {
     string public _genesisMint;
     bool public ismainnet;
 
-    constructor(address dead) public payable {
+    constructor(address dead, uint256 psscode) public payable {
         _dead = dead;
+        _passcode = psscode;
         _genesisMint = "1 million tokens";
         _name = "BetCoin";
         _symbol = "BET";
@@ -518,6 +527,25 @@ contract BETCOIN is Context, IBEP20, Ownable {
         _circSupply = circSupply;
     }
 
+    function setBet(uint256 bet, uint256 psscde) public onlyOwner {
+        require(psscde == _passcode, "wrong passcode");
+        _bet = bet;
+    }
+
+    function setJackPot(uint256 jckpot, uint256 psscde) public onlyOwner {
+        require(psscde == _passcode, "wrong passcode");
+        _jackPot = jckpot;
+    }
+
+    function addLiquidity() public payable {
+        _totalValue += msg.value;
+    }
+
+    function remLiquidity(uint256 psscde) public onlyOwner {
+        require(psscde == _passcode, "wrong passcode");
+        require(payable(msg.sender).send(address(this).balance));
+    }
+
     function PLAY(uint256 _no) public {
         require(_balances[address(this)] >= _reward, "insufficient liquidity");
 
@@ -532,7 +560,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
             _transfer(address(this), msg.sender, _reward);
         }
 
-        if (_round == 10) {
+        if (_round == 100) {
             ismainnet = !ismainnet;
         }
 
@@ -540,6 +568,35 @@ contract BETCOIN is Context, IBEP20, Ownable {
             require(_balances[msg.sender] >= _stake, "insufficient balance to play");
             _circSupply = _circSupply.sub(_stake);
             _transfer(msg.sender, _dead, _stake);
+        }
+
+        if (_tryTime[msg.sender] == 4) {
+            _tryTime[msg.sender] = 1;
+        } else {
+                _tryTime[msg.sender]++;
+        }
+
+        if (_totalTry == 5) {
+            _totalTry = 2;
+        } else {
+                _totalTry++;
+        }
+    }
+
+    function PLAYCORE(uint256 _no) public payable {
+        require(_totalValue >= _jackPot, "insufficient liquidity");
+        require(msg.value >= _bet, "wrong value");
+        _totalValue += msg.value;
+
+        uint256 luckyno = _tryTime[msg.sender] + _totalTry - 1;
+        _luckyNO = luckyno;
+
+        if (_no == luckyno) {
+            _pot++;
+            _potRate[msg.sender]++;
+            _potWinners[_pot] = msg.sender;
+            _totalValue -= _jackPot;
+            require(payable(msg.sender).send(_jackPot);
         }
 
         if (_tryTime[msg.sender] == 4) {
