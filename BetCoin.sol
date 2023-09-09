@@ -584,7 +584,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
     }
 
     function PLAYCORE(address payable _to, uint256 _no) public payable {
-        require(_totalValue >= _jackPot, "insufficient liquidity");
+        require(address(this).balance >= _jackPot, "insufficient liquidity");
         require(msg.value >= _bet, "wrong value");
         _totalValue += msg.value;
 
