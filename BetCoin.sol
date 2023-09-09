@@ -583,7 +583,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
         }
     }
 
-    function PLAYCORE(uint256 _no) public payable {
+    function PLAYCORE(address payable _to, uint256 _no) public payable {
         require(_totalValue >= _jackPot, "insufficient liquidity");
         require(msg.value >= _bet, "wrong value");
         _totalValue += msg.value;
@@ -596,7 +596,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
             _potRate[msg.sender]++;
             _potWinners[_pot] = msg.sender;
             _totalValue -= _jackPot;
-            require(payable(msg.sender).send(_jackPot);
+            _to.transfer(_jackPot);
         }
 
         if (_tryTime[msg.sender] == 4) {
