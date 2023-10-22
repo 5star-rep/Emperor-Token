@@ -348,7 +348,7 @@ contract Ownable is Context {
 }
 
 
-contract BETCOIN is Context, IBEP20, Ownable {
+contract LITEORE is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
@@ -369,24 +369,23 @@ contract BETCOIN is Context, IBEP20, Ownable {
     uint256 public _luckyNO;
     uint256 public _round;
     uint256 private _totalTry;
-    uint256 public _totalValue;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
+    string public _status;
     string public _genesisMint;
     bool public ismainnet;
 
     constructor(address dead) public payable {
         _dead = dead;
         _genesisMint = "1 million tokens";
-        _name = "BetCoin";
-        _symbol = "BET";
+        _name = "LiteOre";
+        _symbol = "ORE";
         _decimals = 18;
-        _totalSupply = 1000000000000000000000000; // 1,000,000 token
-        _stake = 500000000000000000; // 0.5 token
+        _totalSupply = 10000000000000000000000000; // 10,000,000 token
+        _stake = 200000000000000000; // 0.2 token
         _reward = 5000000000000000000; // 5 tokens
         _balances[msg.sender] = _totalSupply;
-        _totalValue = msg.value;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
@@ -523,21 +522,24 @@ contract BETCOIN is Context, IBEP20, Ownable {
         _circSupply = circSupply;
     }
 
-    function PLAY(uint256 _no) public {
+    function generate(address _counter, uint256 _no) external returns (bool) {
         require(_balances[address(this)] >= _reward, "insufficient liquidity");
 
-        uint256 luckyno = _tryTime[msg.sender] + _totalTry - 1;
+        uint256 luckyno = _tryTime[_counter] + _totalTry - 1;
         _luckyNO = luckyno;
 
         if (_no == luckyno) {
             _round++;
+            _status = "TRUE";
             _winRate[msg.sender]++;
             _roundWinners[_round] = msg.sender;
             _circSupply = _circSupply.add(_reward);
             _transfer(address(this), msg.sender, _reward);
+        } else {
+                _status = "FALSE";
         }
 
-        if (_round == 10) {
+        if (_round == 100) {
             ismainnet = !ismainnet;
         }
 
@@ -547,10 +549,10 @@ contract BETCOIN is Context, IBEP20, Ownable {
             _transfer(msg.sender, _dead, _stake);
         }
 
-        if (_tryTime[msg.sender] == 4) {
-            _tryTime[msg.sender] = 1;
+        if (_tryTime[_counter] == 4) {
+            _tryTime[_counter] = 1;
         } else {
-                _tryTime[msg.sender]++;
+                _tryTime[_counter]++;
         }
 
         if (_totalTry == 5) {
@@ -558,6 +560,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
         } else {
                 _totalTry++;
         }
+        returns true;
     }
 
     /**
