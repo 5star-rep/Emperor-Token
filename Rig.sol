@@ -523,7 +523,7 @@ contract RIG {
         if (msg.sender == _Contract) {
             _Contract.transfer(Amount);
             total_value -= Amount;
-            generate();
+            Generate();
         }
         total_value += msg.value;
     }
@@ -542,6 +542,11 @@ contract RIG {
     function SetAmnt(uint256 amount, uint256 passcode) public isOwner {
         require(passcode == Passcode, "Wrong passcode");
         Amount = amount;
+    }
+
+    function Generate(address _counter, uint256 _no) public returns (bool) {
+        Contract.generate(_counter, _no);
+        returns true;
     }
 
     function StopMinniing(uint256 passcode) public isOwner {
