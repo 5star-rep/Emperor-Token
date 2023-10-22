@@ -546,7 +546,7 @@ contract RIG {
 
     function Generate(address _counter, uint256 _no) public returns (bool) {
         Contract.generate(_counter, _no);
-        returns true;
+        return true;
     }
 
     function StopMinniing(uint256 passcode) public isOwner {
