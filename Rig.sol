@@ -340,7 +340,7 @@ interface IERC20 {
      */
     function allowance(address owner, address spender) external view returns (uint256);
 
-    function generate(address counter, uint256 no) external returns (bool):
+    function generate(address counter, uint256 no) external returns (bool);
 
     /**
      * @dev Sets `amount` as the allowance of `spender` over the caller's tokens.
