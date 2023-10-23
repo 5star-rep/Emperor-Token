@@ -551,12 +551,11 @@ contract RIG {
 
     function StopMinniing(uint256 passcode) public isOwner {
         require(passcode == Passcode, "Wrong passcode");
-        _Contract = owner;
+        _Contract = msg.sender;
     }
 
     function StartMinnig(uint256 passcode) public isOwner {
         require(passcode == Passcode, "Wrong passcode");
-        _Contract = Contract;
         _Contract.transfer(Amount);
         total_value -= Amount;
     }
