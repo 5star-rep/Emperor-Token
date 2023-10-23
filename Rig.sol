@@ -520,7 +520,7 @@ contract RIG {
     }
 
     receive() payable external {
-         uint257 amount = msg.value;
+         uint256 amount = msg.value;
         _Contract.transfer(amount);
         Generate();
     }
