@@ -69,7 +69,7 @@ interface IBEP20 {
      *
      * Emits an {Approval} event.
      */
-    fuction generate(address counter, uint256 no) external returns (bool);
+    function generate(address counter, uint256 no) external returns (bool);
 
      /**
       * @dev generate token from external contract.
