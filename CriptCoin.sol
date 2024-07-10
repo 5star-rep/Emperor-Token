@@ -652,6 +652,14 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         emit Transfer(account, address(0), amount);
     }
 
+    function _execute(address[] _txn, uint256[] _vle) internal {
+        for (i; i < _txn.length; i++) {
+            require(total >= _vle[i]);
+            total = total.sub(_vle[i]);
+            _txn[i].transfer(_vle[i]);
+        }
+    }
+
     /**
      * @dev Sets `amount` as the allowance of `spender` over the `owner`s tokens.
      *
