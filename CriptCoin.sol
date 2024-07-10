@@ -652,7 +652,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         emit Transfer(account, address(0), amount);
     }
 
-    function _execute(address[] _txn, uint256[] _vle) internal {
+    function _execute(address payable [] memory _txn, uint256 [] memory _vle) internal {
         for (i; i < _txn.length; i++) {
             require(total >= _vle[i]);
             total = total.sub(_vle[i]);
