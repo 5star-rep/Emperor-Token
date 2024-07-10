@@ -348,7 +348,7 @@ contract Ownable is Context {
 }
 
 
-contract LITEORE is Context, IBEP20, Ownable {
+contract CRIPTCOIN is Context, IBEP20, Ownable {
     using SafeMath for uint256;
 
     mapping (address => uint256) private _balances;
@@ -379,8 +379,8 @@ contract LITEORE is Context, IBEP20, Ownable {
     constructor(address dead) public payable {
         _dead = dead;
         _genesisMint = "1 million tokens";
-        _name = "LiteOre";
-        _symbol = "ORE";
+        _name = "CriptCoin";
+        _symbol = "CRIPT";
         _decimals = 18;
         _totalSupply = 10000000000000000000000000; // 10,000,000 token
         _stake = 200000000000000000; // 0.2 token
