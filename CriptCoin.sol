@@ -569,7 +569,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         } else {
                 _totalTry++;
         }
-        returns true;
+        return true;
     }
 
     /**
