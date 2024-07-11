@@ -393,8 +393,8 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
     }
 
     struct MemPool {
-        address payable [] memory;
-        uint256 [] memory txn;
+        address payable [] mem;
+        uint256 [] txns;
     }
 
     /**
