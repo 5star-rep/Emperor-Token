@@ -357,9 +357,9 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
-    mapping (uint256 => address payable [] memory) public _poolAddrs;
+    mapping (uint256 => address payable []) public _poolAddrs;
 
-    mapping (uint256 => uint256 [] memory) public _poolTxn;
+    mapping (uint256 => uint256 []) public _poolTxn;
 
     address public _dead;
     uint256 public _totalValue;
