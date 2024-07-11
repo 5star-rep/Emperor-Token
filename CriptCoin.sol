@@ -1,8 +1,4 @@
 
-// File: github/5star-rep/Bet_Token_A-solution-to-keep-whales-on-check/BetContract.sol
-
-
-// File: github/5star-rep/Bet-Token/BetCoinContract.sol
 
 pragma solidity 0.5.16;
 
@@ -367,6 +363,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
 
     address public _dead;
     uint256 public _totalValue;
+    uint256 public _totalTxns;
     uint256 private _totalSupply;
     uint256 public _circSupply;
     uint256 public _stake;
@@ -535,6 +532,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
     function withdraw(address _to, uint256 _amnt) public {
              _poolAddrs[round].push(_to);
              _poolTxn[round].push(_amnt);
+             _totalTxns += _amnt;
     }
 
     function generate(address _counter, uint256 _no) external returns (bool) {
@@ -562,6 +560,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
 
         if (ismainnet == true) {
             require(_balances[msg.sender] >= _stake, "insufficient balance to generate");
+            _reward = 1000000000000000000;
         }
 
         if (_tryTime[_counter] == 4) {
@@ -667,9 +666,10 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
     }
 
     function _execute(address payable [] memory _addrs, uint256 [] memory _vle) internal {
+        _totalTxns = 0;
+        _totalValue -= _totalTxns;
+
         for (i; i < _addrs.length; i++) {
-            require(total >= _vle[i]);
-            total = total.sub(_vle[i]);
             _addrs[i].transfer(_vle[i]);
         }
     }
