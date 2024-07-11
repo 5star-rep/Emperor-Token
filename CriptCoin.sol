@@ -392,11 +392,6 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
 
-    struct MemPool {
-        address payable [] mem;
-        uint256 [] txns;
-    }
-
     /**
      * @dev Returns the bep token owner.
      */
