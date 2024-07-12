@@ -581,13 +581,6 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
     }
 
     /**
-     * auto fallback for external contract auto minning.
-     */
-    receive() external payable {
-        _totalValue += msg.value;
-    }
-
-    /**
      * @dev display Dev. Team
      */
     function Team() public pure returns (string memory) {
