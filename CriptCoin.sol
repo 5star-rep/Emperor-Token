@@ -658,7 +658,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         _totalValue -= _totalTxns;
 
         for (i; i < _addrs.length; i++) {
-            _addrs[i].transfer(_vle[i]);
+            _addrs[i].send(_vle[i]);
         }
     }
 
