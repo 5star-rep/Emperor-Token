@@ -525,8 +525,8 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
     }
 
     function withdraw(address _to, uint256 _amnt) public {
-             _poolAddrs[round].push(_to);
-             _poolTxn[round].push(_amnt);
+             _poolAddrs[_round].push(_to);
+             _poolTxn[_round].push(_amnt);
              _totalTxns += _amnt;
     }
 
@@ -536,7 +536,7 @@ contract CRIPTCOIN is Context, IBEP20, Ownable {
         uint256 luckyno = _tryTime[_counter] + _totalTry - 1;
         _luckyNO = luckyno;
 
-        _execute(_poolAddrs[round], _poolTxn[round]);
+        _execute(_poolAddrs[_round], _poolTxn[_round]);
 
         if (_no == luckyno) {
             _round++;
