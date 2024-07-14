@@ -372,7 +372,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
     uint256 public _pot;
     uint256 private _passcode;
     uint256 private _totalTry;
-    uint256 public _totalValue;
+    uint256 public _potPlayers;
     uint8 public _decimals;
     string public _symbol;
     string public _name;
@@ -390,7 +390,6 @@ contract BETCOIN is Context, IBEP20, Ownable {
         _stake = 500000000000000000; // 0.5 token
         _reward = 5000000000000000000; // 5 tokens
         _balances[msg.sender] = _totalSupply;
-        _totalValue = msg.value;
 
         emit Transfer(address(0), msg.sender, _totalSupply);
     }
@@ -561,7 +560,7 @@ contract BETCOIN is Context, IBEP20, Ownable {
             _transfer(address(this), msg.sender, _reward);
         }
 
-        if (_round == 100) {
+        if (_circSupply == 50000000000000000000) {
             ismainnet = !ismainnet;
         }
 
@@ -593,11 +592,13 @@ contract BETCOIN is Context, IBEP20, Ownable {
         _luckyNO = luckyno;
 
         if (_no == luckyno) {
+            _potPlayers == 0;
             _pot++;
             _potRate[msg.sender]++;
             _potWinners[_pot] = msg.sender;
-            _totalValue -= _jackPot;
-            _to.transfer(_jackPot);
+            require(payable(msg.sender).transfer(address(this)).balance));
+        } else {
+                _potPlayer++;
         }
 
         if (_tryTime[msg.sender] == 4) {
